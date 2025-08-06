@@ -312,3 +312,11 @@ vehicle_service_center/
 │   └── validators.py           # Input checks, etc.
 │   └── menu.py                 # Admin/User menu display
 ├── README.md
+
+TABLES:Table Name	Description
+users                     	Login info for users/admins (with role flag)
+vehicles                   	Stores vehicle info (model, number, type, user_id FK)
+services                   	Stores service types (e.g., oil change, repair)
+service_bookings          	Booking records: vehicle, service type, date, status
+mechanics                  	Mechanic info; assigned to bookings
+feedback                   	User feedback on completed services
