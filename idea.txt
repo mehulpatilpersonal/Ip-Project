@@ -264,31 +264,50 @@ library_system/
 
 
 #----------------------------------------------------------------- Vehicle Service Center Management System – Overview ----------------------------------------
-
                          +----------------------+
-                         |    Start Program     |
-                         +----------------------+
+                         +-------------------------+
+                         |     Start Program       |
+                         +-------------------------+
                                    |
-                         +----------------------+
-                         |   Login as:          |
-                         | [1] Admin [2] User   |
-                         +----------------------+
-                            /              \
-                           v                v
-              +--------------------+   +-------------------+
-              |   Admin Functions  |   |   User Functions   |
-              +--------------------+   +-------------------+
-              | 1. Add Service     |   | 1. Book Service    |
-              | 2. Add Mechanic    |   | 2. View Status     |
-              | 3. Assign Task     |   | 3. Cancel Booking  |
-              | 4. View Reports    |   | 4. Service History |
-              | 5. Update Status   |   +-------------------+
-              +--------------------+
-                            \              /
-                             v            v
-                         +----------------------+
-                         |       Logout         |
-                         +----------------------+
+                         +-------------------------+
+                         |    Login as:            |
+                         | [1] Admin   [2] User    |
+                         +-------------------------+
+                             /               \
+                            v                 v
+               +-------------------+   +---------------------+
+               |   Admin Panel     |   |     User Panel      |
+               +-------------------+   +---------------------+
+               | 1. Add Services   |   | 1. Book Service      |
+               | 2. Add Mechanic   |   | 2. View Booking      |
+               | 3. Assign Task    |   | 3. Cancel Booking    |
+               | 4. Update Status  |   | 4. Service History   |
+               | 5. View Reports   |   | 5. Rate Mechanic     |
+               | 6. View Feedback  |   | 6. Submit Feedback   |
+               | 7. Generate Stats |   | 7. Download Invoice  |
+               +-------------------+   +---------------------+
+                             \                 /
+                              v               v
+                    +-------------------------------+
+                    |    Database (MySQL)           |
+                    | Tables: users, bookings,      |
+                    | services, mechanics,          |
+                    | feedback, ratings, invoices   |
+                    +-------------------------------+
+                              |
+                              v
+                 +-----------------------------+
+                 | Pandas + Graphs + Invoices  |
+                 | - Booking Trends            |
+                 | - Service Distribution      |
+                 | - Mechanic Load             |
+                 | - PDF Invoice               |
+                 +-----------------------------+
+                              |
+                              v
+                       +-----------------+
+                       |   Logout / Exit |
+                       +-----------------+
 
 
 vehicle_service_center/
