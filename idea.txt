@@ -321,6 +321,12 @@ service_bookings          	Booking records: vehicle, service type, date, status
 mechanics                  	Mechanic info; assigned to bookings
 feedback                   	User feedback on completed services
 
+
+Create/manage service catalog
+
+Service cost estimation before booking
+
+
 🔹 A. Analytics & Graphs (Pandas + Matplotlib/Plotly)
 Add visuals to your reports/ module:
 
