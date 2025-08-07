@@ -320,3 +320,18 @@ services                   	Stores service types (e.g., oil change, repair)
 service_bookings          	Booking records: vehicle, service type, date, status
 mechanics                  	Mechanic info; assigned to bookings
 feedback                   	User feedback on completed services
+
+🔹 A. Analytics & Graphs (Pandas + Matplotlib/Plotly)
+Add visuals to your reports/ module:
+
+📊 Service Type Distribution – Pie chart of service types (oil change, engine repair, etc.)
+
+📈 Monthly Bookings Trend – Line graph of bookings per month
+
+📍 Mechanic Load Chart – Bar chart showing task counts per mechanic
+
+⏳ Average Service Time – Per mechanic or service type
+
+🕓 Booking Peak Hours – Hour/day when most bookings occur
+
+You can use:
