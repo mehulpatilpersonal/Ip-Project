@@ -1,14 +1,14 @@
-import subprocess
-import platform
-import time
+# import subprocess
+# import platform
+# import time
 
-def run_output_in_new_terminal():
-    script = 'output.py'
-    system = platform.system()
+# def run_output_in_new_terminal():
+#     script = 'output.py'
+#     system = platform.system()
 
-    if system == 'Windows':
-        # Open new Command Prompt window and run output.py
-        subprocess.Popen(['start', 'cmd', '/k', f'python {script}'], shell=True)
+#     if system == 'Windows':
+#         # Open new Command Prompt window and run output.py
+#         subprocess.Popen(['start', 'cmd', '/k', f'python {script}'], shell=True)
 
 
    
