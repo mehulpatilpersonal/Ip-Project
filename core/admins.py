@@ -14,9 +14,13 @@ def admin_login():
                 print("\nADMIN LOGIN SUCCESSFUL!\n")
                 print(df[['user_id', 'username', 'user_role']])
                 admin_dashboard()  # Call the admin dashboard function
+                break
         else:
             print("Invalid credentials, please try again.")
-            input("Press Enter to continue... or 'exit' to quit: ")
+            k=input("Press Enter to continue... or 'exit' to quit: ")
+            if k.lower() == 'exit':
+                print("Exiting login.")
+                return
         
 def admin_dashboard():
     pass
