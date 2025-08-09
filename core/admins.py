@@ -11,6 +11,6 @@ def admin_login():
         admin_dashboard()  # Call the admin dashboard function
     else:
         print("Invalid credentials, please try again.")
-
+        
 def admin_dashboard():
     pass
