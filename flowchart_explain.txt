@@ -1,4 +1,67 @@
  +----------------------+
+
+
++-------------------------+
+|     Start Program       |
++-------------------------+
+            |
++-------------------------------------------+
+| Login as:                                 |
+| [1] Admin   [2] User   [3] Mechanic Login |
++-------------------------------------------+
+      |             |                |
+      v             v                v
++-------------+  +-------------+  +-------------+
+| Admin Login |  | User Login  |  | Mechanic    |
+| Verified?   |  | Verified?   |  | Login       |
++-------------+  +-------------+  | Verified?   |
+   | Yes           | Yes          +-------------+
+   v               v                   | Yes
++----------------+  +----------------+ v
+| Admin Dashboard|  | User Dashboard | +------------------+
++----------------+  +----------------+ | Mechanic Dashboard|
+| 1. Manage Users|  | 1. View/Update | +------------------+
+| 2. Vehicles    |  |    Profile     | | 1. View Assigned |
+| 3. Bookings    |  | 2. Add Vehicle | |    Jobs          |
+| 4. Mechanics   |  | 3. View/Edit/  | | 2. Update Job    |
+| 5. Inventory   |  |    Delete      | |    Status        |
+| 6. Invoices    |  |    Vehicle     | | 3. Update Service|
+| 7. Feedback    |  | 4. Browse      | |    Description   |
+| 8. Reports     |  |    Services    | |    & Work Type   |
++----------------+  |    - Check Price| | 4. Job History   |
+                    |    - Est. Hours | |    Completed /   |
+                    |    - Warranty   | |    Incomplete    |
+                    | 5. Book Service | | 5. Parts Request |
+                    | 6. Make Payment | +------------------+
+                    | 7. View Booking |
+                    |    History      |
+                    | 8. Track Order  |
+                    | 9. Cancel Order |
+                    |10. View/Download|
+                    |    Invoice      |
+                    |11. Check Payment|
+                    |    Status       |
+                    |12. Feedback     |
+                    +-----------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                          +-------------------------+
                          |     Start Program       |
                          +-------------------------+
