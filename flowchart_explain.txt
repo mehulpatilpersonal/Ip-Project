@@ -45,6 +45,148 @@
                     +-----------------+
 
 
+#SQL TABLE STRUCTURE
+
++---------------------+
+|       users         |
++---------------------+
+| user_id (PK)        |
+| name                |
+| username (UNIQUE)   |
+| email (UNIQUE)      |
+| phone               |
+| address             |
+| city                |
+| state               |
+| password            |
+| user_role (ENUM)    |
+| registered_at       |
++---------------------+
+         |
+         | 1-to-many
+         v
++---------------------+
+|      vehicles       |
++---------------------+
+| vehicle_no (PK)     |
+| vehicle_brand       |
+| model               |
+| type (ENUM)         |
+| user_id (FK)        |
++---------------------+
+         |
+         | 1-to-many
+         v
++---------------------+      +---------------------+
+| service_bookings    |      |     services        |
++---------------------+      +---------------------+
+| booking_id (PK)     |<---->| service_id (PK)     |
+| vehicle_no (FK)     |      | service_name        |
+| service_id (FK)     |      | description         |
+| booking_date        |      | base_price          |
+| status (ENUM)       |      | estimated_hours     |
++---------------------+      | warranty_months     |
+         |                   | category (ENUM)     |
+         |                   | status (ENUM)       |
+         v                   | created_at          |
++---------------------+      +---------------------+
+| mechanic_assignments|
++---------------------+
+| assignment_id (PK)  |
+| booking_id (FK)     |
+| mechanic_id (FK)    |
+| assigned_date       |
++---------------------+
+         ^
+         |
++---------------------+
+|  mechanics_info     |
++---------------------+
+| mechanic_id (PK)    |
+| full_name           |
+| specialization      |
+| phone               |
+| email               |
++---------------------+
+
++---------------------+
+|      invoices       |
++---------------------+
+| invoice_id (PK)     |
+| booking_id (FK)     |
+| user_id (FK)        |
+| amount              |
+| payment_status      |
+| payment_method      |
+| invoice_date        |
++---------------------+
+
++---------------------+
+|  parts_inventory    |
++---------------------+
+| part_id (PK)        |
+| part_name           |
+| description         |
+| unit_price          |
+| stock_quantity      |
+| supplier            |
++---------------------+
+
++---------------------+
+|      feedback       |
++---------------------+
+| feedback_id (PK)    |
+| booking_id (FK)     |
+| rating (1-5)        |
+| comments            |
+| created_at          |
++---------------------+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
