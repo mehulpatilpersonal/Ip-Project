@@ -21,7 +21,7 @@ from styles import *  # Import all predefined styles (BRIGHT_GREEN, DIM_YELLOW, 
 def main_func():
     while True:
         # Main menu display
-        print(f"\n{BRIGHT_CYAN}WELCOME TO VEHICLE MANAGEMENT SYSTEM")
+        print(f"\n{BRIGHT_CYAN}WELCOME TO VEHICLE MANAGEMENT SYSTEM 🔥🔥")
         print(f"{BRIGHT_YELLOW}PLEASE SELECT FROM THE GIVEN OPTION:")
         print(f"{BRIGHT_GREEN} 1. NEW USER")
         print(f"{BRIGHT_GREEN} 2. OLD USER")
