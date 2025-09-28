@@ -4,15 +4,17 @@ from sqlalchemy import create_engine
 import pymysql
 
 def sql_connect():
+    # mycon = sql.connect(host="ipaddress", user="garage",password="StrongPass123!",database="vehiclemanagement")
     mycon = sql.connect(host="localhost", user="root", password="123456", database="vehiclemanagement")
 
     cursor = mycon.cursor() 
     mycon.autocommit = False # Ensures queries are not committed automaticallu. You’ll need to call mycon.commit() or mycon.rollback().
     mycon.start_transaction(isolation_level='READ COMMITTED')# Sets the isolation level for the transaction.# Prevents dirty reads.
         
-    engine = create_engine("mysql+pymysql://root:123456@localhost/vehiclemanagement",isolation_level="READ COMMITTED",#echo=True ONLY FOR DEBUGGING
-    )
-    
+    engine = create_engine("mysql+pymysql://root:123456@localhost/vehiclemanagement",isolation_level="AUTOCOMMIT",#echo=True ONLY FOR DEBUGGING
+    ) #READ COMMITED WAS NOT WORKING FOR TO_SQL , ONLY WORKING FOR READ SQL QUERY, NOW AUTOCOMMIT IS WORKING FINE FOR TO_SQL AND READ SQL BOTH 
+     # I TRIED without AUTOCOMMIT THE CONNECTION WAS NOT COMMITING THE DATA TO TABLES AUTOMATICALLY EITHER USING engine.begin() was the option with every query
+     #OR I CAN USE AUTOCOMMIT IN ENGINE ITSELF, SO I CHOSE AUTOCOMMIT IN ENGINE ITSELF
     engcon=engine.connect()
     return mycon,cursor,engine,engcon
 

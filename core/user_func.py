@@ -5,6 +5,10 @@ from db.queries_sql import mycon, cursor, engine, engcon
 
 from styles import *  # Import style constants
 
+"""from tabulate import tabulate
+
+print(tabulate(df, headers='keys', tablefmt='grid'))
+"""
 
 def user_rejisteration():
     while True:
@@ -243,19 +247,23 @@ def view_or_update_profile(currentuserid):
 
 
 # === 2) Add Vehicle ===
-def add_vehicle(currentuseridid: int):
+def add_vehicle(currentuserid):
     print(f"\n{BRIGHT_CYAN}Add Vehicle")
     vehicle_no = input("Vehicle No (unique): ").strip()
     brand = input("Brand: ").strip()
     model = input("Model: ").strip()
-    vtype = input("Type (Car/Bike/Truck/Bus/Tractor/Other): ").strip()
-
+    while True:
+        vtype = input("Type (Car/Bike/Truck/Bus/Tractor/Other): ").strip().capitalize()
+        if vtype not in ['Car', 'Bike', 'Truck', 'Bus', 'Tractor', 'Other']:
+            print(f"{BRIGHT_RED}❌ Invalid type. Please enter one of Car, Bike, Truck, Bus, Tractor, Other.")
+            continue
+        break
     df = pd.DataFrame([{
         "vehicle_no": vehicle_no,
         "vehicle_brand": brand,
         "model": model,
         "type": vtype,
-        "user_id": currentuseridid,
+        "user_id": currentuserid,
     }])
     try:
         df.to_sql("vehicles", con=engcon, if_exists="append", index=False)
@@ -265,10 +273,10 @@ def add_vehicle(currentuseridid: int):
 
 
 # === 3) Manage Vehicles ===
-def manage_vehicles(currentuseridid: int):
+def manage_vehicles(currentuserid: int):
     vdf = pd.read_sql(
         "SELECT vehicle_no, vehicle_brand, model, type FROM vehicles WHERE user_id=%s",
-        con=engcon, params=(currentuseridid,)
+        con=engcon, params=(currentuserid,)
     )
     if vdf.empty:
         print(f"{BRIGHT_RED}No vehicles found.")
@@ -283,13 +291,13 @@ def manage_vehicles(currentuseridid: int):
     print("1) Edit  2) Delete  (else cancel)")
     act = input("Choose: ").strip()
     if act == "1":
-        row = vdf[vdf["vehicle_no"].astype(str) == str(vno)].iloc[0]
-        brand = input(f"New brand [{row['vehicle_brand']}]: ").strip() or row['vehicle_brand']
-        model = input(f"New model [{row['model']}]: ").strip() or row['model']
-        vtype = input(f"New type [{row['type']}]: ").strip() or row['type']
+        print(vdf)
+        brand = input(f"New brand [{vdf.loc[0,'vehicle_brand']}]: ").strip() or vdf.loc[0,'vehicle_brand']
+        model = input(f"New model [{vdf.loc[0,'model']}]: ").strip() or vdf.loc[0,'model']
+        vtype = input(f"New type [{vdf.loc[0,'type']}]: ").strip() or vdf.loc[0,'type']
         cursor.execute(
             "UPDATE vehicles SET vehicle_brand=%s, model=%s, type=%s WHERE vehicle_no=%s AND user_id=%s",
-            (brand, model, vtype, vno, currentuseridid),
+            (brand, model, vtype, vno, currentuserid),
         )
         mycon.commit()
         print(f"{BRIGHT_GREEN}✅ Vehicle updated.")
@@ -298,7 +306,7 @@ def manage_vehicles(currentuseridid: int):
         if ans in ("y", "yes"):
             cursor.execute(
                 "DELETE FROM vehicles WHERE vehicle_no=%s AND user_id=%s",
-                (vno, currentuseridid),
+                (vno, currentuserid),
             )
             mycon.commit()
             print(f"{BRIGHT_GREEN}✅ Vehicle deleted.")
@@ -318,24 +326,35 @@ def browse_services():
 
 
 # === 5) Book Service ===
-def book_service(currentuseridid: int):
+def book_service(currentuserid: int):
     vdf = pd.read_sql(
         "SELECT vehicle_no, vehicle_brand, model FROM vehicles WHERE user_id=%s",
-        con=engcon, params=(currentuseridid,)
+        con=engcon, params=(currentuserid,)
     )
     if vdf.empty:
         print(f"{BRIGHT_RED}No vehicles found. Add one first.")
         return
     print(f"\n{BRIGHT_CYAN}Your Vehicles")
     print(vdf.to_string(index=False))
+    #ADD LOGIC FOR CHOOSING FROM THE VEHICLES AVAILABLE ON THE CUSTOMER ACCOUNT 
     vno = input("Enter Vehicle No: ").strip()
     if not vno:
         return
-
-    sdf = pd.read_sql(
-        "SELECT service_id, service_name, base_price FROM services WHERE status='Active'",
-        con=engcon,
-    )
+    #CHOOSING CATEGORY WISE SERVICES
+    print(f"{BRIGHT_YELLOW}You can choose service category from below options: \n 1.Maintenance \n 2.Repair \n 3.Inspection \n 4.Upgrade \n 5.Painting \n 6.Other Services")
+    category_choose= input("Enter Category Number: ").strip()
+    category_dict={"1":"Maintenance","2":"Repair","3":"Inspection","4":"Upgrade","5":"Painting","6":"Other Services"}
+    category=category_dict.get(category_choose,"")
+    if category:
+        sdf = pd.read_sql(
+        "SELECT service_id, service_name, base_price FROM services WHERE status='Active' AND category=%s",
+        con=engcon, params=(category,)
+        )
+    else:
+        sdf = pd.read_sql(
+            "SELECT service_id, service_name, base_price FROM services WHERE status='Active'",
+            con=engcon,
+        )
     if sdf.empty:
         print(f"{BRIGHT_RED}No services available.")
         return
@@ -359,10 +378,10 @@ def book_service(currentuseridid: int):
 
 
 # === 6) Make Payment ===
-def make_payment(currentuseridid: int):
+def make_payment(currentuserid: int):
     idf = pd.read_sql(
         "SELECT invoice_id, booking_id, amount, payment_status FROM invoices WHERE user_id=%s AND payment_status='Pending'",
-        con=engcon, params=(currentuseridid,)
+        con=engcon, params=(currentuserid,)
     )
     if idf.empty:
         print(f"{BRIGHT_RED}No pending invoices.")
@@ -372,18 +391,21 @@ def make_payment(currentuseridid: int):
     inv_id = input("Enter Invoice ID to pay: ").strip()
     if not inv_id:
         return
-
+    #ASK FOR BANKING NAME, UPI ID, CARD NO ETC. 
+    #payout status changed to Pending and payment method updated
+    #Pending means payment initiated but not confirmed the confirmation request can be sent to admin for verification
+    #if admin verified then payment status changed to Paid otherwise remain Pending or Unpaid if cancelled by admin 
     method = input("Payment method (Cash/Card/UPI/Bank Transfer): ").strip() or "Cash"
     cursor.execute(
         "UPDATE invoices SET payment_status='Paid', payment_method=%s, invoice_date=NOW() WHERE invoice_id=%s AND user_id=%s",
-        (method, inv_id, currentuseridid),
+        (method, inv_id, currentuserid),
     )
     mycon.commit()
     print(f"{BRIGHT_GREEN}✅ Payment recorded.")
 
 
 # === 7) View Booking History ===
-def view_booking_history(currentuseridid: int):
+def view_booking_history(currentuserid: int):
     q = """
     SELECT b.booking_id, b.booking_date, b.status,
            v.vehicle_no, v.vehicle_brand, v.model,
@@ -395,7 +417,7 @@ def view_booking_history(currentuseridid: int):
      WHERE u.user_id = %s
      ORDER BY b.booking_date DESC
     """
-    h = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    h = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if h.empty:
         print(f"{BRIGHT_RED}No bookings yet.")
         return
@@ -404,7 +426,7 @@ def view_booking_history(currentuseridid: int):
 
 
 # === 8) Track Order ===
-def track_order(currentuseridid: int):
+def track_order(currentuserid: int):
     q = """
     SELECT b.booking_id, b.status, b.booking_date,
            s.service_name,
@@ -419,7 +441,7 @@ def track_order(currentuseridid: int):
      WHERE u.user_id = %s
      ORDER BY b.booking_date DESC
     """
-    df = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    df = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if df.empty:
         print(f"{BRIGHT_RED}No orders to track.")
         return
@@ -428,7 +450,7 @@ def track_order(currentuseridid: int):
 
 
 # === 9) Cancel Order ===
-def cancel_order(currentuseridid: int):
+def cancel_order(currentuserid: int):
     q = """
     SELECT b.booking_id, b.status, s.service_name, b.booking_date
       FROM service_bookings b
@@ -437,7 +459,7 @@ def cancel_order(currentuseridid: int):
      WHERE v.user_id = %s AND b.status IN ('Pending','In Progress')
      ORDER BY b.booking_date DESC
     """
-    cdf = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    cdf = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if cdf.empty:
         print(f"{BRIGHT_RED}No cancellable bookings.")
         return
@@ -458,14 +480,14 @@ def cancel_order(currentuseridid: int):
 
 
 # === 10) View / Download Invoice ===
-def view_or_download_invoice(currentuseridid: int):
+def view_or_download_invoice(currentuserid: int):
     q = """
     SELECT invoice_id, booking_id, amount, payment_status, payment_method, invoice_date
       FROM invoices
      WHERE user_id=%s
      ORDER BY invoice_date DESC
     """
-    df = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    df = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if df.empty:
         print(f"{BRIGHT_RED}No invoices yet.")
         return
@@ -474,9 +496,9 @@ def view_or_download_invoice(currentuseridid: int):
 
 
 # === 11) Check Payment Status ===
-def check_payment_status(currentuseridid: int):
+def check_payment_status(currentuserid: int):
     q = "SELECT invoice_id, amount, payment_status FROM invoices WHERE user_id=%s ORDER BY invoice_id DESC"
-    df = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    df = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if df.empty:
         print(f"{BRIGHT_RED}No invoices found.")
         return
@@ -485,7 +507,7 @@ def check_payment_status(currentuseridid: int):
 
 
 # === 12) Feedback ===
-def leave_feedback(currentuseridid: int):
+def leave_feedback(currentuserid: int):
     q = """
     SELECT b.booking_id, s.service_name, b.booking_date
       FROM service_bookings b
@@ -495,7 +517,7 @@ def leave_feedback(currentuseridid: int):
      WHERE v.user_id = %s AND b.status='Completed' AND f.booking_id IS NULL
      ORDER BY b.booking_date DESC
     """
-    df = pd.read_sql(q, con=engcon, params=(currentuseridid,))
+    df = pd.read_sql(q, con=engcon, params=(currentuserid,))
     if df.empty:
         print(f"{BRIGHT_RED}No completed bookings available for feedback.")
         return
