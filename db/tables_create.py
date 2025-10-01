@@ -116,7 +116,6 @@ def create_tables():
         )
     """)
 
-    mycon.commit()
 
 # Inserting data into the table-user
 def in_users(username, email, phone, address, password, user_role):

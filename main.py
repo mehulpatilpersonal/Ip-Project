@@ -14,8 +14,10 @@ import time
 
 from core.admins import admin_login
 from core.user_func import user_rejisteration, user_login
+from core.mechanic_func import mechanic_login
 from db.tables_create import create_tables,create_database
 from db.queries_sql import sql_connect
+
 from styles import *  # Import all predefined styles (BRIGHT_GREEN, DIM_YELLOW, etc.)
 
 def main_func():
@@ -26,7 +28,8 @@ def main_func():
         print(f"{BRIGHT_GREEN} 1. NEW USER")
         print(f"{BRIGHT_GREEN} 2. OLD USER")
         print(f"{BRIGHT_GREEN} 3. ADMIN")
-        print(f"{BRIGHT_RED} 4. EXIT")
+        print(f"{BRIGHT_GREEN} 4. MECHANIC")
+        print(f"{BRIGHT_RED} 5. EXIT")
         
         try:
             choice = int(input(f"\n{BRIGHT_YELLOW}Enter your choice (1-4): "))
@@ -44,7 +47,10 @@ def main_func():
         elif choice == 3:
             print(f"\n{BRIGHT_GREEN}WELCOME ADMIN\n")
             admin_login()
-        elif choice == 4:
+        elif choice ==4:
+            print(f"\n{BRIGHT_GREEN}WELCOME MECHANIC\n")
+            mechanic_login()
+        elif choice == 5:
             print(f"\n{BRIGHT_CYAN}THANK YOU FOR USING VEHICLE MANAGEMENT SYSTEM\n")
             break
         else:
